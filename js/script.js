@@ -23,6 +23,7 @@ const placeholder = function (word) {
     // Join all placeholder letters to form word in progress
     wordInProgress.innerText = placeholderLetters.join("");
 };
+
 // Call function to display circle placeholders
 placeholder(word);
 
@@ -32,34 +33,40 @@ guessLetterButton.addEventListener("click", function (e) {
     // Prevent default reload since we're working with a dynamic form
     e.preventDefault();
 
+    // Empty message paragraph
+    message.innerText = "";
+
     // Create variable to capture input value
     const guess = letterInput.value;
-    console.log(guess);
 
-    message.innerHTML = "";
+    // Make sure it's a single letter
     const goodGuess = validateInput(guess);
-    console.log(validInput);
 
     if(goodGuess) {
+        // It's a letter - make the guess
         makeGuess(guess);
     }
     letterInput.value = "";
 });
 
 
+// Validate user input to make sure it's not empty, more than one letter or a special character
 const validateInput = function (input) {
     const acceptedLetter = /[a-zA-Z]/;
+    // Is the input empty?
     if(input.length === 0) {
-        // is the input empty?
         message.innerText = "Please enter a letter.";
-    } else if(input !== acceptedLetter) {
-        // did user type more than one letter?
+    }
+    // Did user type more than one letter?
+    else if(input.length > 1) {
         message.innerText = "Please enter a single letter.";
-    } else if(!input.match(acceptedLetter)) {
-        // did user type a number or special character?
+    }
+    // Did user type a number or special character?
+    else if(!input.match(acceptedLetter)) {
         message.innerText = "Please enter a letter between A-Z.";
-    } else {
-        // user successfully submitted a single letter
+    }
+    // User successfully submitted a single letter
+    else {  
         return input;
     }
 };
@@ -67,10 +74,10 @@ const validateInput = function (input) {
 
 const makeGuess = function(guess) {
     guess = guess.toUpperCase();
-    if(guessedLettersElement.includes(guess)) {
+    if(guessedLetters.includes(guess)) {
         message.innerText = "You already guessed that letter, silly. Try again.";
     } else {
         guessedLetters.push(guess);
         console.log(guessedLetters);
     }
-}
+};
