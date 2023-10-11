@@ -3,9 +3,8 @@ const guessLetterButton = document.querySelector(".guess");                 // g
 const letterInput = document.querySelector("#letter");                      // current letter guessed
 const wordInProgress = document.querySelector(".word-in-progress");         // word in progress
 const remainingGuessesElement = document.querySelector(".remaining");       // guesses remaining sentence
-const remainingGuessesSpan = document.querySelector(".remaining span");     // guesses remaining #
+let remainingGuessesSpan = document.querySelector(".remaining span");     // guesses remaining #
 const message = document.querySelector(".message");                         // letters guessed message
-
 const playAgainButton = document.querySelector(".play-again");              // play again button
 
 let word = "magnolia";                                                      // word to guess
@@ -15,10 +14,24 @@ let remainingGuesses = 8;                                                   // h
 
 // Async function to fetch data from a file via URL
 const getWord = async function () {
+    // Fetch the words from a txt file via link
     const response = await fetch("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
     const words = await response.text();
     console.log(words);
+
+    // Split up the words in the array
+    const wordArray = words.split("\n");
+    console.log(wordArray);
+
+    // Pick a random word from the array
+    const randomIndex = Math.floor(Math.random() * wordArray.length);
+    word = wordArray[randomIndex].trim();
+
+    // Call function to display circle placeholders
+    placeholder(word);
 }
+
+// Begin the game
 getWord();
 
 
@@ -34,9 +47,6 @@ const placeholder = function (word) {
     // Join all placeholder letters to form word in progress
     wordInProgress.innerText = placeholderLetters.join("");
 };
-
-// Call function to display circle placeholders
-placeholder(word);
 
 
 // Make the guess button functional
@@ -143,6 +153,7 @@ const updateGuessesRemaining = function(guess) {
     // Game Over - no more guesses
     if(remainingGuesses === 0) {
         message.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.`;
+        startOver();
     } else if(remainingGuesses === 1) {
         remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
     } else {
@@ -155,5 +166,14 @@ const checkIfWin = function() {
     if (word.toUpperCase() === wordInProgress.innerText) {
         message.classList.add("win");
         message.innerHTML = "You guessed the word!";
+        startOver();
     }
+};
+
+
+const startOver = function() {
+    guessLetterButton.classList.add(".hide");
+    remainingGuessesElement.classList.add(".hide");
+    guessedLettersElement.classList.add(".hide");
+    playAgainButton.classList.remove(".hide");
 };
