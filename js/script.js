@@ -162,6 +162,7 @@ const updateGuessesRemaining = function(guess) {
 };
 
 
+// Congratulate user if they won
 const checkIfWin = function() {
     if (word.toUpperCase() === wordInProgress.innerText) {
         message.classList.add("win");
@@ -171,9 +172,34 @@ const checkIfWin = function() {
 };
 
 
+// Mechanics of starting over
 const startOver = function() {
+    // Remove guess button, remaining guesses element, guessed letters element
     guessLetterButton.classList.add(".hide");
     remainingGuessesElement.classList.add(".hide");
     guessedLettersElement.classList.add(".hide");
+    // Show play again button
     playAgainButton.classList.remove(".hide");
 };
+
+
+// When play again is clicked
+playAgainButton.addEventListener("click", function() {
+    message.classList.remove("win");
+    message.innerHTML = "";
+    guessedLetters = [];
+    remainingGuesses = 8;
+    guessedLetter = [];
+    remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
+    guessedLettersElement.innerHTML = "";
+    message.innerText = "";
+
+    // Grab a new word
+    getWord();
+
+    // Show the right UI elements
+    guessLetterButton.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+    remainingGuessesElement.classList.remove("hide");
+    guessedLettersElement.classList.remove("hide");
+});
