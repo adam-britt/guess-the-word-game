@@ -1,14 +1,14 @@
 const guessedLettersElement = document.querySelector(".guessed-letters");   // prior letters guessed
 const guessLetterButton = document.querySelector(".guess");                 // guess button
-const letterInput = document.querySelector("#letter");                      // current letter guessed
+const letterInput = document.querySelector(".letter");                      // current letter guessed
 const wordInProgress = document.querySelector(".word-in-progress");         // word in progress
 const remainingGuessesElement = document.querySelector(".remaining");       // guesses remaining sentence
-let remainingGuessesSpan = document.querySelector(".remaining span");     // guesses remaining #
+const remainingGuessesSpan = document.querySelector(".remaining span");     // guesses remaining #
 const message = document.querySelector(".message");                         // letters guessed message
 const playAgainButton = document.querySelector(".play-again");              // play again button
 
 let word = "magnolia";                                                      // word to guess
-const guessedLetters = [];                                                  // array of letters guessed so far
+let guessedLetters = [];                                                  // array of letters guessed so far
 let remainingGuesses = 8;                                                   // how many guesses remain
 
 
@@ -143,7 +143,6 @@ const updateGuessesRemaining = function(guess) {
     if(!upperWord.includes(guess)) {
         message.innerText = `Sorry, the word has no ${guess} in it.`;
         remainingGuesses -= 1;
-        remainingGuessesSpan -= 1;
         console.log(remainingGuesses);
     } // Good guess - remainingGuesses does not change
     else {
@@ -164,9 +163,10 @@ const updateGuessesRemaining = function(guess) {
 
 // Congratulate user if they won
 const checkIfWin = function() {
-    if (word.toUpperCase() === wordInProgress.innerText) {
+    if(word.toUpperCase() === wordInProgress.innerText) {
         message.classList.add("win");
-        message.innerHTML = "You guessed the word!";
+        message.innerHTML = `<p class="highlight">You guessed the word!</p>`;
+
         startOver();
     }
 };
@@ -175,21 +175,20 @@ const checkIfWin = function() {
 // Mechanics of starting over
 const startOver = function() {
     // Remove guess button, remaining guesses element, guessed letters element
-    guessLetterButton.classList.add(".hide");
-    remainingGuessesElement.classList.add(".hide");
-    guessedLettersElement.classList.add(".hide");
+    guessLetterButton.classList.add("hide");
+    remainingGuessesElement.classList.add("hide");
+    guessedLettersElement.classList.add("hide");
     // Show play again button
-    playAgainButton.classList.remove(".hide");
+    playAgainButton.classList.remove("hide");
 };
 
 
 // When play again is clicked
 playAgainButton.addEventListener("click", function() {
+    // Reset all original values - grab new word
     message.classList.remove("win");
-    message.innerHTML = "";
     guessedLetters = [];
     remainingGuesses = 8;
-    guessedLetter = [];
     remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
     guessedLettersElement.innerHTML = "";
     message.innerText = "";
